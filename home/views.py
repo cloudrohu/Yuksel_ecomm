@@ -1,19 +1,54 @@
 from django.shortcuts import render
+from django.contrib import messages
+import json
+from home.forms import SearchForm
 
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
+from home.models import Setting, ContactForm, ContactMessage
+from product.models import Product,Category
 # Create your views here.
 def index(request):
+    setting = Setting.objects.get(pk=1)
+    category = Category.objects.all()
 
-    return render(request,'index.html')
+
+
+    products_slider = Product.objects.all().order_by('id')[:4]  #first 4 products
+    products_latest = Product.objects.all().order_by('-id')[:4]  # last 4 products
+    products_picked = Product.objects.all().order_by('?')[:4]   #Random selected 4 products
+
+
+
+    page="home"
+    context={
+        'setting':setting,
+        'category':category,
+        'page':page,
+        'products_picked':products_picked,
+        'products_slider':products_slider,
+        'products_latest':products_latest,
+    }
+
+    return render(request,'index.html',context)
 
 
 def aboutus(request):
     #category = categoryTree(0,'',currentlang)
-   
-    return render(request, 'about.html',)
+    setting = Setting.objects.get(pk=1)
+    category = Category.objects.all()
+
+    
+    context={
+        'setting':setting,
+        'category':category
+    }
+ 
+    return render(request, 'about.html',context)
 
 def contactus(request):
-    currentlang = request.LANGUAGE_CODE[0:2]
-    #category = categoryTree(0,'',currentlang)
+    setting = Setting.objects.get(pk=1)
+    category = Category.objects.all()
+
     if request.method == 'POST': # check post
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -26,13 +61,58 @@ def contactus(request):
             data.save()  #save data to table
             messages.success(request,"Your message has ben sent. Thank you for your message.")
             return HttpResponseRedirect('/contact')
-
-    defaultlang = settings.LANGUAGE_CODE[0:2]
-    currentlang = request.LANGUAGE_CODE[0:2]
-    setting = Setting.objects.get(pk=1)
-    if defaultlang != currentlang:
-        setting = SettingLang.objects.get(lang=currentlang)
-
     form = ContactForm
-    context={'setting':setting,'form':form  }
-    return render(request, 'contactus.html', context)
+    context={
+        'setting':setting,
+        'form':form ,
+        'category':category,
+    }    
+    return render(request, 'contactus.html',context)
+
+def category_products(request,id,slug):
+    
+    category = Category.objects.all()
+    products = Product.objects.filter(category_id=id) #default language
+    
+    context={'products': products,
+             #'category':category,
+             'category':category }
+    return render(request,'category_products.html',context)
+
+
+
+def search(request):
+    if request.method == 'POST': # check post
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query'] # get form input data
+            catid = form.cleaned_data['catid']
+            if catid==0:
+                products=Product.objects.filter(title__icontains=query)  #SELECT * FROM product WHERE title LIKE '%query%'
+            else:
+                products = Product.objects.filter(title__icontains=query,category_id=catid)
+
+            category = Category.objects.all()
+            context = {'products': products,
+                        'query':query,
+                       'category': category }
+            return render(request, 'search_products.html', context)
+
+    return HttpResponseRedirect('/')
+
+
+def search_auto(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        products = Product.objects.filter(title__icontains=q)
+
+        results = []
+        for rs in products:
+            product_json = {}
+            product_json = rs.title
+            results.append(product_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

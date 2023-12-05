@@ -1,7 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.utils.html import mark_safe
 # Create your models here.
 from django.db.models import Avg, Count
 from django.forms import ModelForm
@@ -30,7 +30,9 @@ class Brand(models.Model):
 
     def get_absolute_url(self):
         return reverse('brand_detail', kwargs={'slug': self.slug})
-
+    
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
 
 class Category(MPTTModel):
     STATUS = (
@@ -53,6 +55,9 @@ class Category(MPTTModel):
     def save(self , *args , **kwargs):
         self.slug = slugify(self.title)
         super(Category ,self).save(*args , **kwargs)
+        
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
 
     class MPTTMeta:
         order_insertion_by = ['title']

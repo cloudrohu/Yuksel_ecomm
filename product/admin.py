@@ -5,7 +5,7 @@ from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
 from product import models
-from product.models import Category, Product, Images, Comment, Color, Size, Variants
+from product.models import Category, Product, Images, Comment, Color, Size, Variants,Brand
 
 
 
@@ -23,8 +23,8 @@ class ProductVariantsInline(admin.TabularInline):
 
 class CategoryAdmin2(DraggableMPTTAdmin):
     mptt_indent_field = "title"
-    list_display = ('tree_actions', 'indented_title',
-                    'related_products_count', 'related_products_cumulative_count')
+    list_display = ('id','tree_actions', 'indented_title', 'image_tag',
+                    'related_products_count', 'related_products_cumulative_count',)
     list_display_links = ('indented_title',)
     prepopulated_fields = {'slug': ('title',)}
     
@@ -100,4 +100,5 @@ admin.site.register(Comment,CommentAdmin)
 admin.site.register(Images,ImagesAdmin)
 admin.site.register(Color,ColorAdmin)
 admin.site.register(Size,SizeAdmin)
+admin.site.register(Brand,)
 admin.site.register(Variants,VariantsAdmin)
