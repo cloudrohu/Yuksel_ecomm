@@ -34,7 +34,7 @@ def index(request):
 
 def aboutus(request):
     #category = categoryTree(0,'',currentlang)
-    setting = Setting.objects.all().order_by('-id')[:1]
+    setting = Setting.objects.get()
     category = Category.objects.all()
 
     
@@ -46,7 +46,7 @@ def aboutus(request):
     return render(request, 'about.html',context)
 
 def contactus(request):
-    setting = Setting.objects.all().order_by('-id')[:1]
+    setting = Setting.objects.get()
     category = Category.objects.all()
 
     if request.method == 'POST': # check post
