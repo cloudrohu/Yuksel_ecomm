@@ -22,7 +22,7 @@ class ProductVariantsInline(admin.TabularInline):
     show_change_link = True
 
     
-@admin_thumbnails.thumbnail('image')
+
 class CategoryAdmin2(DraggableMPTTAdmin):
     mptt_indent_field = "title"
     list_display = ('id','tree_actions', 'indented_title', 'image_tag',
