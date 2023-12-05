@@ -109,7 +109,7 @@ def search_auto(request):
         results = []
         for rs in products:
             product_json = {}
-            product_json = rs.title
+            product_json = rs.title +" > " + rs.category.title
             results.append(product_json)
         data = json.dumps(results)
     else:

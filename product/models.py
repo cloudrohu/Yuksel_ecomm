@@ -57,7 +57,10 @@ class Category(MPTTModel):
         super(Category ,self).save(*args , **kwargs)
         
     def image_tag(self):
-        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
+        if self.image.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+        else:
+            return ""
 
     class MPTTMeta:
         order_insertion_by = ['title']

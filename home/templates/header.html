@@ -66,6 +66,7 @@
                 <div class="header-search">
                     <form action="/search/" method="post">
                         {% csrf_token %}
+                        
                         <input id="query" name="query" class="input search-input" type="text" placeholder="Enter your keyword">
 
                         <select name="catid"  class="input search-categories">
