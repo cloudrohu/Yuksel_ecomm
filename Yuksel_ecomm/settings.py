@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     'jet.dashboard',
     'jet',
     
+    'user.apps.UserConfig',
+    'order.apps.OrderConfig',
     'home.apps.HomeConfig',
     'product.apps.ProductConfig',
 
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     'mptt',
     'ckeditor',
     'ckeditor_uploader',
+    
 
 ]
 

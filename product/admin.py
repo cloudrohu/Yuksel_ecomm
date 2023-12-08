@@ -11,6 +11,7 @@ from product.models import Category, Product, Images, Comment, Color, Size, Vari
 
 @admin_thumbnails.thumbnail('image')
 class ProductImageInline(admin.TabularInline):
+    list_display = ['id']
     model = Images
     readonly_fields = ('id',)
     extra = 1
@@ -61,7 +62,7 @@ class CategoryAdmin2(DraggableMPTTAdmin):
 
 @admin_thumbnails.thumbnail('image')
 class ImagesAdmin(admin.ModelAdmin):
-    list_display = ['image','title','image_thumbnail']
+    list_display = ['image','title','id','image_thumbnail']
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title','category', 'status','image_tag','slug']
@@ -72,8 +73,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['subject','comment', 'status','create_at']
+    list_display = ['user','subject','comment', 'product','status','create_at','rate','ip']
     list_filter = ['status']
+    list_editable = ['status']
     readonly_fields = ('subject','comment','ip','user','product','rate','id')
 
 class ColorAdmin(admin.ModelAdmin):
