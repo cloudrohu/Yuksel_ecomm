@@ -15,6 +15,7 @@ class Setting(models.Model):
         ('False', 'False'),
     )
     title = models.CharField(max_length=150)
+    logo = models.ImageField(blank=True, upload_to='logo/')
     keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     company = models.CharField(max_length=50)

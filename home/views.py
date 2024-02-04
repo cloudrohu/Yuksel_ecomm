@@ -1,17 +1,30 @@
-from django.shortcuts import render
-from django.contrib import messages
 import json
-from home.forms import SearchForm
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.db.models import Avg, Count, Q, F
+from django.db.models.functions import Concat
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
-from home.models import Setting, ContactForm, ContactMessage
-from product.models import Product,Category,Images,Comment
+from django.shortcuts import render
+
 # Create your views here.
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils import translation
+
+from home.forms import SearchForm
+from home.models import Setting, ContactForm, ContactMessage,FAQ
+from Yuksel_ecomm import settings
+from product.models import Category, Product, Images, Comment, Variants
+from user.models import UserProfile
+# Create your views here.
+
+
 def index(request):
     setting = Setting.objects.all().order_by('-id')[:1]
     category = Category.objects.all()
-
-
 
     products_slider = Product.objects.all().order_by('id')[:4]  #first 4 products
     products_latest = Product.objects.all().order_by('-id')[:4]  # last 4 products
@@ -34,7 +47,8 @@ def index(request):
 
 def aboutus(request):
     #category = categoryTree(0,'',currentlang)
-    setting = Setting.objects.get()
+    setting = Setting.objects.all().order_by('-id')[:1]
+
     category = Category.objects.all()
 
     
@@ -46,7 +60,8 @@ def aboutus(request):
     return render(request, 'about.html',context)
 
 def contactus(request):
-    setting = Setting.objects.get()
+    setting = Setting.objects.all().order_by('-id')[:1]
+
     category = Category.objects.all()
 
     if request.method == 'POST': # check post
@@ -70,11 +85,13 @@ def contactus(request):
     return render(request, 'contactus.html',context)
 
 def category_products(request,id,slug):
+    setting = Setting.objects.all().order_by('-id')[:1]
     
     category = Category.objects.all()
     products = Product.objects.filter(category_id=id) #default language
     
     context={'products': products,
+             'setting':setting,
              #'category':category,
              'category':category }
     return render(request,'category_products.html',context)
@@ -119,16 +136,59 @@ def search_auto(request):
 
 
 def product_detail(request,id,slug):
-
+    query = request.GET.get('q')
+    # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
+    #defaultlang = settings.LANGUAGE_CODE[0:2] #en-EN
+    #currentlang = request.LANGUAGE_CODE[0:2]
+    #category = categoryTree(0, '', currentlang)
     category = Category.objects.all()
-    product = Product.objects.get(pk=id) #default language
+
+    product = Product.objects.get(pk=id)
+
+    
+    # <<<<<<<<<< M U L T I   L A N G U G A E <<<<<<<<<<<<<<< end
+
     images = Images.objects.filter(product_id=id)
     comments = Comment.objects.filter(product_id=id,status='True')
+    context = {'product': product,'category': category,
+               'images': images, 'comments': comments,
+               }
+    if product.variant !="None": # Product have variants
+        if request.method == 'POST': #if we select color
+            variant_id = request.POST.get('variantid')
+            variant = Variants.objects.get(id=variant_id) #selected product by click color radio
+            colors = Variants.objects.filter(product_id=id,size_id=variant.size_id )
+            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
+            query += variant.title+' Size:' +str(variant.size) +' Color:' +str(variant.color)
+        else:
+            variants = Variants.objects.filter(product_id=id)
+            colors = Variants.objects.filter(product_id=id,size_id=variants[0].size_id )
+            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
+            variant =Variants.objects.get(id=variants[0].id)
+        context.update({'sizes': sizes, 'colors': colors,
+                        'variant': variant,'query': query
+                        })
     
-    context={'product': product,
-             #'category':category,
-             'category':category,
-              'images': images, 
-              'comments': comments,}
-    
-    return render(request,'product_detail.html',context)
+    return render(request,'product_detail1.html',context)
+
+
+def ajaxcolor(request):
+    data = {}
+    if request.POST.get('action') == 'post':
+        size_id = request.POST.get('size')
+        productid = request.POST.get('productid')
+        colors = Variants.objects.filter(product_id=productid, size_id=size_id)
+        context = {
+            'size_id': size_id,
+            'productid': productid,
+            'colors': colors,
+        }
+        data = {'rendered_table': render_to_string('color_list.html', context=context)}
+        return JsonResponse(data)
+    return JsonResponse(data)
+
+
+
+def faq(request):
+   
+    return render(request, 'faq.html')

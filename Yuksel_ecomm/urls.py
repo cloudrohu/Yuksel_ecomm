@@ -30,6 +30,8 @@ urlpatterns = [
     path('login/', UserViews.login_form, name='login'),
     path('logout/', UserViews.logout_func, name='logout'),
     path('signup/', UserViews.signup_form, name='signup'),
+    path('faq/', views.faq, name='faq'),
+    path('ajaxcolor/', views.ajaxcolor, name='ajaxcolor'),
     
 
 

@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from django.db.models.signals import pre_save
+
 from django.utils.text import slugify
 
 
