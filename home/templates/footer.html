@@ -6,28 +6,32 @@
 			<!-- row -->
 			<div class="row">
 				<!-- footer widget -->
+				{% for rs in setting %}
 				<div class="col-md-3 col-sm-6 col-xs-6">
 					<div class="footer">
 						<!-- footer logo -->
 						<div class="footer-logo">
 							<a class="logo" href="#">
-		            <img src="{% static '' %}img/logo.png" alt="">
+					
+		            <img src="{{rs.logo.url}}" alt="">
+					
 		          </a>
 						</div>
 						<!-- /footer logo -->
 
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna</p>
+						<p>{{rs.description}}</p>
 
 						<!-- footer social -->
 						<ul class="footer-social">
-							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
-							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+							<li><a href="{{rs.facebook}}"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="{{rs.twitter}}"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="{{rs.instagram}}"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="{{rs.youtube}}"><i class="fa fa-youtube"></i></a></li>
+							<li><a href="{{rs.pinterest}}"><i class="fa fa-pinterest"></i></a></li>
 						</ul>
 						<!-- /footer social -->
 					</div>
+					{% endfor %}
 				</div>
 				<!-- /footer widget -->
 
@@ -53,10 +57,12 @@
 					<div class="footer">
 						<h3 class="footer-header">Customer Service</h3>
 						<ul class="list-links">
-							<li><a href="#">About Us</a></li>
-							<li><a href="#">Shiping & Return</a></li>
-							<li><a href="#">Shiping Guide</a></li>
-							<li><a href="#">FAQ</a></li>
+							<li><a href="/">Home</a></li>
+							<li><a href="{% url 'service' %}">Services</a></li>
+							<li><a href="{% url 'furniture' %}">Product</a></li>
+							<li><a href="{% url 'aboutus' %}">About Us</a></li>
+							<li><a href="{% url 'contactus' %}">Contact</a></li>
+		
 						</ul>
 					</div>
 				</div>

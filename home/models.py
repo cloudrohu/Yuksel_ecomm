@@ -8,7 +8,6 @@ from django.utils.safestring import mark_safe
 # Create your models here.
 
 
-
 class Setting(models.Model):
     STATUS = (
         ('True', 'True'),
@@ -32,6 +31,7 @@ class Setting(models.Model):
     instagram = models.CharField(blank=True,max_length=50)
     twitter = models.CharField(blank=True,max_length=50)
     youtube = models.CharField(blank=True, max_length=50)
+    pinterest = models.CharField(blank=True, max_length=50)
     aboutus = RichTextUploadingField(blank=True)
     contact = RichTextUploadingField(blank=True)
     references = RichTextUploadingField(blank=True)
@@ -41,8 +41,6 @@ class Setting(models.Model):
 
     def __str__(self):
         return self.title
-
-
 
 class ContactMessage(models.Model):
     STATUS = (
@@ -62,8 +60,6 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return self.name
-    
-
 
 class ContactForm(ModelForm):
     class Meta:
@@ -75,7 +71,6 @@ class ContactForm(ModelForm):
             'email'   : TextInput(attrs={'class': 'input','placeholder':'Email Address'}),
             'message' : Textarea(attrs={'class': 'input','placeholder':'Your Message','rows':'5'}),
         }
-
 
 class FAQ(models.Model):
     STATUS = (
@@ -94,4 +89,37 @@ class FAQ(models.Model):
         return self.question
 
 
+class Offer(models.Model):
+    title = models.CharField(max_length=50)
+    image=models.ImageField(blank=True,upload_to='images/')
+    image_2=models.ImageField(blank=True,upload_to='images/')
+    image_3=models.ImageField(blank=True,upload_to='images/')
+    featured_project = models.BooleanField(default=False)
+    create_at=models.DateTimeField(auto_now_add=True)
+    update_at=models.DateTimeField(auto_now=True)
+
+    def image_tag(self):
+        if self.image.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+        else:
+            return ""
+
+    def __str__(self):
+        return self.title
+
+class Slider(models.Model):
+    title = models.CharField(max_length=50)
+    image=models.ImageField(blank=True,upload_to='images/')
+    featured_project = models.BooleanField(default=False)
+    create_at=models.DateTimeField(auto_now_add=True)
+    update_at=models.DateTimeField(auto_now=True)
+
+    def image_tag(self):
+        if self.image.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+        else:
+            return ""
+
+    def __str__(self):
+        return self.title
 

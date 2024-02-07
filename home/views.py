@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from home.forms import SearchForm
-from home.models import Setting, ContactForm, ContactMessage,FAQ
+from home.models import Setting, ContactForm, ContactMessage,FAQ,Slider,Offer
 from Yuksel_ecomm import settings
 from product.models import Category, Product, Images, Comment, Variants
 from user.models import UserProfile
@@ -25,24 +25,46 @@ from user.models import UserProfile
 def index(request):
     setting = Setting.objects.all().order_by('-id')[:1]
     category = Category.objects.all()
-
+    offer = Offer.objects.filter(featured_project = 'True').order_by('id')[:2]  #first 4 products
+    featured_category = Category.objects.filter(featured_category = 'True').order_by('id')[:4]  #first 4 products
+    slider = Slider.objects.filter(featured_project = 'True').order_by('id')[:6]  #first 4 products
     products_slider = Product.objects.all().order_by('id')[:4]  #first 4 products
     products_latest = Product.objects.all().order_by('-id')[:4]  # last 4 products
     products_picked = Product.objects.all().order_by('?')[:4]   #Random selected 4 products
-
-
-
     page="home"
     context={
+        'offer':offer,
+        'slider':slider,
         'setting':setting,
         'category':category,
         'page':page,
         'products_picked':products_picked,
         'products_slider':products_slider,
         'products_latest':products_latest,
+        'featured_category':featured_category,
     }
 
     return render(request,'index.html',context)
+
+def SERVICES(request):
+    #category = categoryTree(0,'',currentlang)
+    setting = Setting.objects.all().order_by('-id')[:1]
+    category = Category.objects.all()    
+    context={
+        'setting':setting,
+        'category':category
+    } 
+    return render(request, 'service.html',context)
+
+def furniture(request):
+    #category = categoryTree(0,'',currentlang)
+    setting = Setting.objects.all().order_by('-id')[:1]
+    category = Category.objects.all()    
+    context={
+        'setting':setting,
+        'category':category
+    } 
+    return render(request, 'furniture.html',context)
 
 
 def aboutus(request):
@@ -95,7 +117,6 @@ def category_products(request,id,slug):
              #'category':category,
              'category':category }
     return render(request,'category_products.html',context)
-
 
 
 def search(request):
@@ -186,7 +207,6 @@ def ajaxcolor(request):
         data = {'rendered_table': render_to_string('color_list.html', context=context)}
         return JsonResponse(data)
     return JsonResponse(data)
-
 
 
 def faq(request):

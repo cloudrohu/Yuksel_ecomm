@@ -6,39 +6,21 @@
     <div class="container">
         <!-- row -->
         <div class="row">
+
+            {% for rs in featured_category %}
             <!-- banner -->
             <div class="col-md-4 col-sm-6">
                 <a class="banner banner-1" href="#">
-                    <img src="{% static '' %}img/banner10.jpg" alt="">
+                    <img src="{{rs.image.url}}" alt="">
                     <div class="banner-caption text-center">
-                        <h2 class="white-color">NEW COLLECTION</h2>
+                        <h2 class="white-color">{{rs.title}}</h2>
                     </div>
                 </a>
             </div>
             <!-- /banner -->
+            {% endfor %}
 
-            <!-- banner -->
-            <div class="col-md-4 col-sm-6">
-                <a class="banner banner-1" href="#">
-                    <img src="{% static '' %}img/banner11.jpg" alt="">
-                    <div class="banner-caption text-center">
-                        <h2 class="white-color">NEW COLLECTION</h2>
-                    </div>
-                </a>
-            </div>
-            <!-- /banner -->
-
-            <!-- banner -->
-            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-3">
-                <a class="banner banner-1" href="#">
-                    <img src="{% static '' %}img/banner12.jpg" alt="">
-                    <div class="banner-caption text-center">
-                        <h2 class="white-color">NEW COLLECTION</h2>
-                    </div>
-                </a>
-            </div>
-            <!-- /banner -->
-
+           
         </div>
         <!-- /row -->
     </div>
@@ -391,6 +373,7 @@
 </div>
 <!-- /section -->
 
+{% for rs in offer %}
 <!-- section -->
 <div class="section section-grey">
     <!-- container -->
@@ -400,10 +383,9 @@
             <!-- banner -->
             <div class="col-md-8">
                 <div class="banner banner-1">
-                    <img src="{% static '' %}img/banner13.jpg" alt="">
+                    <img src="{{rs.image.url}}" alt="" style="height: 675px;">
                     <div class="banner-caption text-center">
-                        <h1 class="primary-color">HOT DEAL<br><span class="white-color font-weak">Up to 50% OFF</span></h1>
-                        <button class="primary-btn">Shop Now</button>
+                        
                     </div>
                 </div>
             </div>
@@ -412,9 +394,8 @@
             <!-- banner -->
             <div class="col-md-4 col-sm-6">
                 <a class="banner banner-1" href="#">
-                    <img src="{% static '' %}img/banner11.jpg" alt="">
+                    <img src="{{rs.image_2.url}}" alt="" style="height: 325px;">
                     <div class="banner-caption text-center">
-                        <h2 class="white-color">NEW COLLECTION</h2>
                     </div>
                 </a>
             </div>
@@ -423,10 +404,8 @@
             <!-- banner -->
             <div class="col-md-4 col-sm-6">
                 <a class="banner banner-1" href="#">
-                    <img src="{% static '' %}img/banner12.jpg" alt="">
+                    <img src="{{rs.image_3.url}}" alt="" style="height: 325px;">
                     <div class="banner-caption text-center">
-                        <h2 class="white-color">NEW COLLECTION</h2>
-                    </div>
                 </a>
             </div>
             <!-- /banner -->
@@ -436,7 +415,7 @@
     <!-- /container -->
 </div>
 <!-- /section -->
-
+{% endfor %}
 <!-- section -->
 <div class="section">
     <!-- container -->

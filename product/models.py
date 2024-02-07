@@ -47,6 +47,7 @@ class Category(MPTTModel):
     description = models.TextField(max_length=255)
     image=models.ImageField(blank=True,upload_to='images/')
     status=models.CharField(max_length=10, choices=STATUS)
+    featured_category = models.BooleanField(default=False)
     slug = models.SlugField(unique=True , null=True , blank=True)
     create_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
@@ -81,6 +82,11 @@ class Category(MPTTModel):
 
 
 class Product(models.Model):
+    PRODUCT_SERVICE = (
+        ('Product', 'Product'),
+        ('Service', 'Service'),
+    )
+
     STATUS = (
         ('True', 'True'),
         ('False', 'False'),
@@ -91,21 +97,21 @@ class Product(models.Model):
         ('Size', 'Size'),
         ('Color', 'Color'),
         ('Size-Color', 'Size-Color'),
-
     )
+    type=models.CharField(max_length=25,choices=PRODUCT_SERVICE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE) #many to one relation with Category
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE) #many to one relation with Brand
     title = models.CharField(max_length=150)
     keywords = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
     image=models.ImageField(upload_to='images/',null=False)
-    price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
-    amount=models.IntegerField(default=0)
-    minamount=models.IntegerField(default=3)
+    mrp=models.IntegerField(default=0)
+    offer_price=models.IntegerField(default=3)
     variant=models.CharField(max_length=10,choices=VARIANTS, default='None')
     detail=RichTextUploadingField()
     slug = models.SlugField(null=False, unique=True)
     status=models.CharField(max_length=10,choices=STATUS)
+    featured_project = models.BooleanField(default=False)
     create_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
     def __str__(self):
