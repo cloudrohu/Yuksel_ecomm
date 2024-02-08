@@ -60,6 +60,14 @@ Table OF Contents
 	Typography
 \*----------------------------*/
 
+.cmamps-area {
+  line-height: 0;
+}
+.cmamps-area iframe {
+  min-height: 590px;
+  width: 100%;
+}
+
 body {
   font-family: 'Hind', sans-serif;
   color: #4A4E5A;

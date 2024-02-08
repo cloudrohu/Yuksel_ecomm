@@ -68,6 +68,14 @@
         <!-- /container -->
     </div>
     <!-- /section -->
+    
+    <div class="cmamps-area">
+        {% for rs in setting %}
+        {{rs.google_map | safe}}
+        {% endfor %}
+    </div>
 
+
+<br>
 
 {% endblock %}

@@ -37,6 +37,7 @@ class Setting(models.Model):
     pinterest = models.CharField(blank=True, max_length=50)
     aboutus = RichTextUploadingField(blank=True)
     contact = RichTextUploadingField(blank=True)
+    google_map = models.CharField(max_length=1500,blank=True,)
     references = RichTextUploadingField(blank=True)
     status=models.CharField(max_length=10,choices=STATUS)
     create_at=models.DateTimeField(auto_now_add=True)
