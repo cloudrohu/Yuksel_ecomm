@@ -26,11 +26,13 @@ def index(request):
     setting = Setting.objects.all().order_by('-id')[:1]
     category = Category.objects.all()
     offer = Offer.objects.filter(featured_project = 'True').order_by('id')[:2]  #first 4 products
-    featured_category = Category.objects.filter(featured_category = 'True').order_by('id')[:4]  #first 4 products
+    featured_category = Category.objects.filter(featured_category = 'True').order_by('id')[:3]  #first 4 products
     slider = Slider.objects.filter(featured_project = 'True').order_by('id')[:6]  #first 4 products
     products_slider = Product.objects.all().order_by('id')[:4]  #first 4 products
-    products_latest = Product.objects.all().order_by('-id')[:4]  # last 4 products
-    products_picked = Product.objects.all().order_by('?')[:4]   #Random selected 4 products
+    products_latest = Product.objects.all().order_by('-id')[:8]  # last 4 products
+    featured_project = Product.objects.filter(featured_project = 'True').order_by('-id')[:12]  # last 4 products
+    delivered = Product.objects.filter(delivered = 'True').order_by('-id')[:12]  # last 4 products
+    products_picked = Product.objects.all().order_by('?')[:8]   #Random selected 4 products
     page="home"
     context={
         'offer':offer,
@@ -41,7 +43,9 @@ def index(request):
         'products_picked':products_picked,
         'products_slider':products_slider,
         'products_latest':products_latest,
+        'featured_project':featured_project,
         'featured_category':featured_category,
+        'delivered':delivered,
     }
 
     return render(request,'index.html',context)
